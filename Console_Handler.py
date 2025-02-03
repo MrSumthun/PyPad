@@ -22,8 +22,8 @@ def init():
     print(" *** PyPad Version: " + version_number + " ***")
     print("Running on: " + detect_os())
     print("Starting...")
-    for i in tqdm(range(100), colour='#2f4f4f'):          #This will be useful for file r/w
-        time.sleep(0.001) 
+    #for i in tqdm(range(100), colour='#36013f'):          #This will be useful for file r/w
+   #     time.sleep(0.001) 
 
 # print_user is for avoiding cyclic import
 
