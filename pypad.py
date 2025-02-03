@@ -1,18 +1,19 @@
 import tkinter as tk
 import sys
-
+import console_handler
 
 window = tk.Tk()
+console_handler.init()
 
 #Initializing our commonly used variables
 window.geometry("1280x720")
 program_name = "PyPad"
-version_number = "0.1"
+version_number = console_handler.version_number
 background_color = 'dark slate gray'
 window_bg = 'dark slate gray'
 file = open(program_name + ".txt", "r+")
 
-label = tk.Label(window, text=program_name + "Version: " + version_number, bg=window_bg)
+title_label = tk.Label(window, text=program_name + "Version: " + version_number + " Running on: " + console_handler.detect_os(), bg=window_bg)
 
 #Text area will always have a black background for readability
 text_widget = tk.Text(window, height=23, width=100, bg="black")
@@ -27,7 +28,7 @@ def get_text():
     return text
 
 def console_print():
-    print(str(get_text()))    
+    console_handler.print_user(str(get_text()))    
 
 print_button = tk.Button(window, text="Print to Console", command=console_print, bg=background_color)
 
@@ -61,7 +62,7 @@ clear_file_button = tk.Button(window, text="Clear File Contents", command=clear_
 window.configure(bg=window_bg)
 
 # Sets placement of all elements
-label.pack()
+title_label.pack()
 text_widget.pack()
 print_button.pack(side="left")
 write_file_button.pack(side="left")
