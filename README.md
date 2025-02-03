@@ -14,5 +14,3 @@ Still updating actively on this project
 
 ## TODOs
 * Implement a more advanced read write system
-
-* Implement Windows support (This is developed on Arch)
