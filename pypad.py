@@ -4,7 +4,7 @@ import sys
 window = tk.Tk()
 window.geometry("1280x720")
 
-file = open("guifile", "r+")
+file = open("pypad.txt", "r+")
 
 label = tk.Label(window, text="Basic Notepad")
 label.pack()
