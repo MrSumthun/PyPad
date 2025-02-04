@@ -11,17 +11,19 @@ Console_Handler.init()
 window.geometry("1280x720")
 program_name = "PyPad"
 version_number = Console_Handler.version_number
-file = open(program_name + ".txt", "r+")
 
+#Labels
 title_label = tk.Label(window, text=program_name + "Version: " + version_number + " | "+ " Running on: " + Console_Handler.detect_os(), fg="white")
 status_label = tk.Label(window)
 
 #Text area will always have a black background for readability
 text_widget = tk.Text(window, height=20, width=100, bg="black")
 
+#Reverts status label back to null
 def revert_status():
     status_label.config(text="")
 
+#Controls status label
 def status(x):
     label_text = str(x)
     status_label.config(text=label_text)
@@ -29,49 +31,43 @@ def status(x):
 
 def exit():
     Console_Handler.exit_()
-    sys.exit(0)
 
-exit_button = tk.Button(window, text="Exit", command=exit)
-
+#Controls nabbing text from the textarea
 def get_text():
     text = text_widget.get("1.0", "end-1c")
     return text
 
+#Prints textarea to console
 def console_print():
     Console_Handler.print_user(str(get_text()))    
     text_widget.delete("1.0", tk.END)
     status("Printed to Console")
 
-print_button = tk.Button(window, text="Print to Console", command=console_print)
-
 def print_to_file():
-    file.seek(0)
-    file.write(get_text())
     status("Write Success!")
-    text_widget.delete("1.0", tk.END)
-    file.flush()
-
-write_file_button = tk.Button(window, text="Print to File", command=print_to_file)
+    File_Worker.write_file(get_text())
 
 def read_from_file():
-    file.seek(0)
-    file_text = file.read()
-    text_widget.insert(tk.END, file_text)
+    text_widget.insert(tk.END, File_Worker.read_file())
     status("Read Success!")
 
-read_file_button = tk.Button(window, text="Read from File", command=read_from_file)
+
 
 def clear_text_area():
     text_widget.delete("1.0", tk.END)
     status("Cleared")
 
+exit_button = tk.Button(window, text="Exit", command=exit)    
+
+print_button = tk.Button(window, text="Print to Console", command=console_print)
+
+write_file_button = tk.Button(window, text="Print to File", command=print_to_file)
+
+read_file_button = tk.Button(window, text="Read from File", command=read_from_file)
+
 clear_text_button = tk.Button(window, text="Clear Text Area", command=clear_text_area)
 
-def clear_file():
-    file.truncate(0)
-    status("Cleared")
-
-clear_file_button = tk.Button(window, text="Clear File Contents", command=clear_file)
+clear_file_button = tk.Button(window, text="Clear File Contents", command=File_Worker.clear_file)
 
 def fileworks():
     File_Worker.Open_File_Handler()

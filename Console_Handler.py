@@ -1,4 +1,5 @@
 from os import system
+import sys
 from tqdm import tqdm
 import time
 import platform
@@ -31,6 +32,7 @@ def print_user(x):
     print(x) 
 
 def exit_():
+    sys.exit(0)
     print("User has exited, closing....")
 
 
