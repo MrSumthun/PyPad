@@ -8,7 +8,7 @@ window = tk.Tk()
 Console_Handler.init()
 
 #Initializing our commonly used variables
-window.geometry("1280x720")
+window.geometry("800x600")
 program_name = "PyPad"
 version_number = Console_Handler.version_number
 
@@ -17,7 +17,14 @@ title_label = tk.Label(window, text=program_name + "Version: " + version_number 
 status_label = tk.Label(window)
 
 #Text area will always have a black background for readability
-text_widget = tk.Text(window, height=20, width=100, bg="black")
+#Except on Linux Distros, need to detect OS and change this to white
+
+if Console_Handler.detect_os() != "Windows" or "windows":
+    bgColorPerOS = "white"
+else:
+    bgColorPerOS = "black"
+print("Automatic Background Detection: " + bgColorPerOS)
+text_widget = tk.Text(window, height=20, width=100, bg=bgColorPerOS)
 
 #Reverts status label back to null
 def revert_status():
@@ -81,7 +88,7 @@ clear_file_button = tk.Button(window, text="Clear File Contents", command=clear_
 def fileworks():
     File_Worker.Open_File_Handler()
 
-fileworks_button = tk.Button(window, text="File Manager", command=fileworks)
+#fileworks_button = tk.Button(window, text="File Manager", command=fileworks)
 
 
 # Sets placement of all elements
@@ -92,7 +99,7 @@ write_file_button.pack(side="left")
 read_file_button.pack(side="left")
 clear_file_button.pack(side="right")
 clear_text_button.pack(side="right")
-fileworks_button.pack(side="right")
+#fileworks_button.pack(side="right")
 exit_button.pack(side="bottom")
 status_label.pack(side="bottom")
 
