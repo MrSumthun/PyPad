@@ -52,12 +52,10 @@ def print_to_file():
     status("Write Success!")
     File_Worker.write_file(get_text())
 
-#This doesn't work and instead says nothing in file no matter what. Will have to fix
 def read_from_file():
-    print(File_Worker.read_file())
     file_contents = File_Worker.read_file()
-    if file_contents != " ":
-        status("Nothing in File!")
+    if file_contents == "":
+        status("File is Empty")
         text_widget.insert(tk.END, file_contents)
     else:
         text_widget.insert(tk.END, file_contents)
@@ -71,6 +69,7 @@ def clear_file():
     File_Worker.clear()
     status("File Cleared")
 
+#Declare button and called upon functions
 exit_button = tk.Button(window, text="Exit", command=exit)    
 
 print_button = tk.Button(window, text="Print to Console", command=console_print)
