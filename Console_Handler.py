@@ -1,13 +1,12 @@
 from os import system
 import sys
-from tqdm import tqdm
 import time
 import platform
 
 # This file handles any console output and OS Detection
 # Also handles status label
 
-version_number = "0.1"
+version_number = "0.2"
 
 def detect_os():
     return platform.system()
@@ -22,9 +21,7 @@ def init():
     clear_screen()
     print(" *** PyPad Version: " + version_number + " ***")
     print("Running on: " + detect_os())
-    print("Starting...")
-    #for i in tqdm(range(100), colour='#36013f'):          #This will be useful for file r/w
-   #     time.sleep(0.001) 
+    print("Started at: " + time.ctime())
 
 # print_user is for avoiding cyclic import
 

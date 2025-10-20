@@ -1,28 +1,26 @@
 import tkinter as tk
-import sys
 import Console_Handler
-import time
 import File_Worker
 
 window = tk.Tk()
 Console_Handler.init()
 
 #Initializing our commonly used variables
-window.geometry("800x600")
+window.geometry("800x400")
 program_name = "PyPad"
 version_number = Console_Handler.version_number
+userOS = Console_Handler.detect_os()
 
 #Labels
-title_label = tk.Label(window, text=program_name + "Version: " + version_number + " | "+ " Running on: " + Console_Handler.detect_os(), fg="white")
+title_label = tk.Label(window, text=program_name + "Version: " + version_number + " | "+ " Running on: " + userOS, fg="white")
 status_label = tk.Label(window)
 
-#Text area will always have a black background for readability
-#Except on Linux Distros, need to detect OS and change this to white
-
-if Console_Handler.detect_os() != "Windows" or "windows":
+#Text area needs to change color because Windows has to be different
+if userOS == "Windows":
     bgColorPerOS = "white"
 else:
     bgColorPerOS = "black"
+
 print("Automatic Background Detection: " + bgColorPerOS)
 text_widget = tk.Text(window, height=20, width=100, bg=bgColorPerOS)
 
@@ -85,11 +83,6 @@ clear_text_button = tk.Button(window, text="Clear Text Area", command=clear_text
 
 clear_file_button = tk.Button(window, text="Clear File Contents", command=clear_file)
 
-def fileworks():
-    File_Worker.Open_File_Handler()
-
-#fileworks_button = tk.Button(window, text="File Manager", command=fileworks)
-
 
 # Sets placement of all elements
 title_label.pack()
@@ -99,7 +92,6 @@ write_file_button.pack(side="left")
 read_file_button.pack(side="left")
 clear_file_button.pack(side="right")
 clear_text_button.pack(side="right")
-#fileworks_button.pack(side="right")
 exit_button.pack(side="bottom")
 status_label.pack(side="bottom")
 
