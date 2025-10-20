@@ -34,6 +34,7 @@ def status(x):
     status_label.config(text=label_text)
     status_label.after(1000, revert_status)
 
+#Avoids extra import onto main file. Sys is only needed in ConsoleHandler
 def exit():
     Console_Handler.exit_()
 
