@@ -46,7 +46,7 @@ def get_text():
 
 # Prints textarea to console
 def console_print():
-    Console_Handler.print_user(str(get_text()))    
+    print(str(get_text()))    
     text_widget.delete("1.0", tk.END)
     status("Printed to Console")
 
