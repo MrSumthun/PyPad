@@ -1,6 +1,6 @@
 import tkinter as tk
-import Console_Handler
-import File_Worker
+import src.Console_Handler as Console_Handler
+import src.File_Worker as File_Worker
 
 window = tk.Tk()
 Console_Handler.init()

@@ -2,7 +2,7 @@ from os import system
 import sys
 import time
 import platform
-from File_Worker import log_event, delete_log
+from src.File_Worker import log_event, delete_log
 from colorama import Fore, Style
 
  
