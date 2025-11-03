@@ -4,13 +4,13 @@ import time
 import platform
 from src.File_Worker import log_event, delete_log
 from colorama import Fore, Style
-
+from PyPad import on_close
  
 # This file handles any console output and OS Detection for PyPad.
 # Also handles status labels in the GUI.
 
 # Version Number
-version_number = "0.2"
+version_number = "0.3.1"
 
 # Where are we?
 def detect_os():
@@ -39,7 +39,8 @@ def init():
     log_event("Program Started - Version: " + version_number)
     log_event("Detected OS: " + detect_os())
 
-def exit_():
+def exit_program_gracefully():
+    on_close()
     log_event("Program Exited by User at: " + time.ctime())
     print(Fore.RED + " *** Exiting PyPad... ***")
     sys.exit(0)
