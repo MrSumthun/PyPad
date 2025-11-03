@@ -5,54 +5,57 @@ import File_Worker
 window = tk.Tk()
 Console_Handler.init()
 
-#Initializing our commonly used variables
-window.geometry("800x400")
+# Initializing our commonly used variables
+window.geometry("700x400")
 program_name = "PyPad"
 version_number = Console_Handler.version_number
 userOS = Console_Handler.detect_os()
 
-#Labels
+# Labels
 title_label = tk.Label(window, text=program_name + "Version: " + version_number + " | "+ " Running on: " + userOS, fg="white")
-status_label = tk.Label(window)
+status_label = tk.Label(window, width=20, height=5)
 
-#Text area needs to change color because Windows has to be different
+# Text area needs to change color because Windows has to be different
+# TODO: Implement user switchable dark/light mode
 if userOS == "Windows":
     bgColorPerOS = "white"
 else:
     bgColorPerOS = "black"
 
-print("Automatic Background Detection: " + bgColorPerOS)
+# DEBUG: print("Automatic Background Detection: " + bgColorPerOS)
 text_widget = tk.Text(window, height=20, width=100, bg=bgColorPerOS)
 
-#Reverts status label back to null
+# Reverts status label back to null
 def revert_status():
     status_label.config(text="")
 
-#Controls status label
+# Controls status label
 def status(x):
     label_text = str(x)
     status_label.config(text=label_text)
     status_label.after(1000, revert_status)
 
-#Avoids extra import onto main file. Sys is only needed in ConsoleHandler
+# Avoids extra import onto main file. Sys is only needed in ConsoleHandler
 def exit():
     Console_Handler.exit_()
 
-#Controls nabbing text from the textarea
+# Controls nabbing text from the textarea
 def get_text():
     text = text_widget.get("1.0", "end-1c")
     return text
 
-#Prints textarea to console
+# Prints textarea to console
 def console_print():
     Console_Handler.print_user(str(get_text()))    
     text_widget.delete("1.0", tk.END)
     status("Printed to Console")
 
+# Utilizes File_Worker to write using get_text() function call
 def print_to_file():
     status("Write Success!")
     File_Worker.write_file(get_text())
 
+# Utilizes File_Worker to read file, and call status function to alert user
 def read_from_file():
     file_contents = File_Worker.read_file()
     if file_contents == "":
@@ -61,7 +64,8 @@ def read_from_file():
     else:
         text_widget.insert(tk.END, file_contents)
         status("Read Success!")
-    
+
+# Nulls out the text area     
 def clear_text_area():
     text_widget.delete("1.0", tk.END)
     status("Cleared")
@@ -85,14 +89,21 @@ clear_file_button = tk.Button(window, text="Clear File Contents", command=clear_
 
 
 # Sets placement of all elements
-title_label.pack()
-text_widget.pack()
+status_label.pack(side="bottom")
+title_label.pack(side="top")
+
+# Unecessary to declare side, defaults to middle in this placement
+text_widget.pack() 
+
 print_button.pack(side="left")
 write_file_button.pack(side="left")
 read_file_button.pack(side="left")
+
 clear_file_button.pack(side="right")
 clear_text_button.pack(side="right")
+
 exit_button.pack(side="bottom")
-status_label.pack(side="bottom")
+
+
 
 window.mainloop()
