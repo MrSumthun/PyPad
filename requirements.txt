@@ -1,0 +1,2 @@
+colorama==0.4.6
+# Note: Tkinter is included with most Python installs and is not installed via pip.
