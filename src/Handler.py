@@ -7,7 +7,7 @@ import platform
 # This file handles any console output, logging, and OS Detection for PyPad.
 
 # Version Number
-version_number = "2.0.1"
+version_number = "2.0.2"
 
 # Set up log file path and log file object
 log_file_name = "PyPad_Log"
@@ -16,7 +16,7 @@ log_file = open(log_file_path, "a+")
 
 # Here we log events to a log file
 def log_event(x):
-    print(x)
+    #print(x)
     log_file.seek(0, os.SEEK_END)
     log_file.write(time.ctime() + " - " + x + "\n")
     log_file.flush()

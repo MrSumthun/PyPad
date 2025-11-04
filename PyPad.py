@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
+import os
 from src.Handler import init_console, log_event, exit_program_gracefully, detect_os, version_number
 import src.Settings as settings
 import pyperclip
@@ -100,7 +101,7 @@ edit_menu.add_command(label="Cut", command=cut_content_to_clipboard)
 edit_menu.add_command(label="Copy", command=copy_content_to_clipboard)
 
 # Labels
-title_label = tk.Label(root, text=program_name + "Version: " + version_number + " | "+ " Running on: " + userOS, fg="white")
+title_label = tk.Label(root, text="Version: " + version_number + " | "+ " Running on: " + userOS, fg="white")
 status_label = tk.Label(root, width=20, height=5)
 
 # Save settings on close
@@ -207,6 +208,7 @@ def settings_window():
 
 
 #Declare button and called upon functions
+view_log_button = tk.Button(root, text="View Log", command=lambda: os.startfile("PyPad_Log.txt") if userOS == "Windows" else os.system("open PyPad_Log.txt") if userOS == "MacOS" else os.system("xdg-open PyPad_Log.txt"))
 exit_button = tk.Button(root, text="Exit", command=exit_program)    
 print_button = tk.Button(root, text="Print to Console", command=console_print)
 clear_text_button = tk.Button(root, text="Clear", command=clear_text_area)
@@ -219,8 +221,9 @@ title_label.pack(side="top")
 text_widget.pack(side ="top", fill="both", expand=True) 
 print_button.pack(side="left")
 clear_text_button.pack(side="right")
-exit_button.pack(side="bottom")
-settings_button.pack(side="bottom")
+exit_button.pack(side="right")
+settings_button.pack(side="right")
+view_log_button.pack(side="left")
 menubar.add_cascade(label="File", menu=file_menu)
 menubar.add_cascade(label="Edit", menu=edit_menu)
 
