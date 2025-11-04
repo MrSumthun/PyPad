@@ -9,7 +9,7 @@ Lightweight plain-text editor built with Python and Tkinter. Focuses on fast rea
 ## Features
 - Open and save plain text files
 - Simple event logging to PyPad_Log.txt
-- Minimal dependencies (Python + Tkinter + Colorama)
+- Minimal dependencies
 
 ## Quickstart (macOS)
 1. Clone the repo:
