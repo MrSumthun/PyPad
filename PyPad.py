@@ -21,8 +21,8 @@ userOS = detect_os()
 program_name = "PyPad 2.0 - A Lightweight Text Editor | "
 root.title(program_name)
 version_number = version_number
-text_widget = tk.Text(root, height=20, width=100, bg=bg_color)
 
+text_widget = tk.Text(root, height=20, width=100, bg="white")
 # Graceful exit function that saves settings before exiting, with confirmation dialog
 def exit_program():
     if(messagebox.askokcancel("Exit", "Do you really want to exit?")):

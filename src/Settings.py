@@ -6,7 +6,7 @@ from src.Handler import log_event
 
 DEFAULTS = {
     "geometry": "780x434",
-    "theme": "auto",   # "auto", "light", "dark"
+    "theme": "black",   # "auto", "white", "black"
     "last_file": ""
 }
 
