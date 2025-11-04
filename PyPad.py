@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from src.Handler import init_console, log_event, exit_program_gracefully, detect_os, version_number
 import src.Settings as settings
 import pyperclip
@@ -10,8 +10,9 @@ init_console()
 global bg_color
 
 # Load settings
+default_window_size = "1200x800"
 cfg = settings.load_settings()
-root.geometry(cfg.get("geometry", "780x434"))
+root.geometry(cfg.get("geometry", default_window_size))
 bg_color = cfg.get("theme", "white" if detect_os() == "Windows" else "black")
 userOS = detect_os()
 
@@ -19,13 +20,15 @@ userOS = detect_os()
 program_name = "PyPad 2.0 - A Lightweight Text Editor | "
 root.title(program_name)
 version_number = version_number
-
 text_widget = tk.Text(root, height=20, width=100, bg=bg_color)
 
-# Graceful exit function that saves settings before exiting
+# Graceful exit function that saves settings before exiting, with confirmation dialog
 def exit_program():
-    on_close()
-    exit_program_gracefully()
+    if(messagebox.askokcancel("Exit", "Do you really want to exit?")):
+        on_close()
+        exit_program_gracefully()
+    else:
+        log_event("Exit cancelled by user.")
 
 # Open file dialog and load selected file into text widget
 def open_file():
@@ -36,7 +39,7 @@ def open_file():
     )
 
     if file_path:
-        print(f"Selected file: {file_path}")
+        #DEBUG: print(f"Selected file: {file_path}")
         try:
             with open(file_path, 'r') as file:
                 content = file.read()
@@ -53,17 +56,15 @@ def open_file():
 
 # Save As dialog to save current text widget content to a new file
 def save_file_as():
-   # """Opens a 'Save As' dialog and prints the selected file path."""
     file_path = filedialog.asksaveasfilename(
         defaultextension=".txt",  # Default extension if none is provided
         filetypes=[("Text files", "*.txt"), ("All files", "*.*")], # Filter file types
         title="Save As"  # Title of the dialog window
     )
     if file_path:  # If a file path was selected (not cancelled)
-        print(f"Selected file path: {file_path}")
-        # You would typically write your data to this file_path here
+        # DEBUG: print(f"Selected file path: {file_path}")
         with open(file_path, 'w') as f:
-            f.write(get_text())  # Example: writing current text widget content
+            f.write(get_text())
         status("File Saved Successfully")
         log_event(f"File saved to {file_path}")
         text_widget.delete("1.0", tk.END)  # Clear text area after saving
@@ -128,9 +129,10 @@ def revert_status():
 
 # Controls status label
 def status(x):
+    label_erase_delay = 1200  # milliseconds
     label_text = str(x)
     status_label.config(text=label_text)
-    status_label.after(1000, revert_status)
+    status_label.after(label_erase_delay, revert_status)
 
 # GIMME DAT TEXT
 def get_text():
@@ -148,9 +150,10 @@ def clear_text_area():
     text_widget.delete("1.0", tk.END)
     status("Cleared")
 
+# Here we handle window resizing
 def resize_window():
     resize_window = tk.Toplevel()
-    resize_window.title("Resize Window - PyPad")
+    resize_window.title("Resize Window |" + program_name)
     resize_window.geometry("300x250")
     width_label = tk.Label(resize_window, text="Width:")
     width_label.pack()
@@ -173,14 +176,14 @@ def resize_window():
         except ValueError:
             log_event("Invalid dimensions entered for resize.")
             status("Invalid dimensions")
-# Reverts to saved size from settings
+    # Reverts to saved size from settings
     def revert_resize():
         root.geometry(cfg.get("geometry", "780x434"))
         status("Reverted to Saved Size")
         resize_window.destroy()
-# Reverts to default size per original app size
+    # Reverts to default size per original app size
     def default_window_resize():
-        root.geometry("780x434")
+        root.geometry(default_window_size)
         status("Reverted to Default Size")
         resize_window.destroy()
 
@@ -192,7 +195,7 @@ def resize_window():
     close_button.pack()
 
 def settings_window():
-    root.title("Settings - PyPad")
+    root.title("Settings |" + program_name)
     settings_win = tk.Toplevel(root)
     settings_win.geometry("250x160")
     theme_button = tk.Button(settings_win, text="Toggle Theme", command=toggle_theme)

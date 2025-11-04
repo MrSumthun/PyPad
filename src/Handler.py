@@ -3,12 +3,11 @@ from os import system
 import sys
 import time
 import platform
-from colorama import Fore, Style
  
 # This file handles any console output, logging, and OS Detection for PyPad.
 
 # Version Number
-version_number = "2.0"
+version_number = "2.0.1"
 
 # Set up log file path and log file object
 log_file_name = "PyPad_Log"
@@ -46,16 +45,13 @@ def clear_screen():
 def init_console():
     delete_log()
     clear_screen()
-
-    print(Fore.GREEN + " *** PyPad Version: " + version_number + " ***")
-    print(Style.RESET_ALL)
-
+    print(" *** PyPad Version: " + version_number + " ***")
     log_event("Program Started - Version: " + version_number)
     log_event("Detected OS: " + detect_os())
 
 def exit_program_gracefully():
     log_event("Program Exited by User at: " + time.ctime())
-    print(Fore.RED + " *** Exiting PyPad... ***")
+    print(" *** Exiting PyPad... ***")
     sys.exit(0)
 
 
