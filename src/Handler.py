@@ -16,7 +16,7 @@ log_file = open(log_file_path, "a+")
 
 # Here we log events to a log file
 def log_event(x):
-    #print(x)
+    #print(x) (DEBUG ONLY)
     log_file.seek(0, os.SEEK_END)
     log_file.write(time.ctime() + " - " + x + "\n")
     log_file.flush()
