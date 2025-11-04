@@ -87,18 +87,37 @@ file_menu.add_command(label="Exit", command=exit_program)
 
 # Edit Menu Commands, including Pyperclip functionality
 def cut_content_to_clipboard():
-    selected_text = text_widget.get("sel.first", "sel.last")
-    pyperclip.copy(selected_text)
-    text_widget.delete("sel.first", "sel.last")
-    status("Cut to Clipboard")
+    # Only cut if the user has a selection
+    if text_widget.tag_ranges("sel"):
+        try:
+            selected_text = text_widget.get("sel.first", "sel.last")
+            pyperclip.copy(selected_text)
+            text_widget.delete("sel.first", "sel.last")
+            status("Cut to Clipboard")
+            log_event("Cut selection to clipboard")
+        except tk.TclError as e:
+            # Unexpected Tcl error while cutting
+            status("Cut failed")
+            log_event(f"Cut failed: {e}")
+    else:
+        status("Nothing selected to cut")
+        log_event("Cut attempted with no selection.")
+
 
 def copy_content_to_clipboard():
-    selected_text = text_widget.get("sel.first", "sel.last")
-    pyperclip.copy(selected_text)
-    status("Copied to Clipboard")
-
-edit_menu.add_command(label="Cut", command=cut_content_to_clipboard)
-edit_menu.add_command(label="Copy", command=copy_content_to_clipboard)
+    # Only copy if the user has a selection
+    if text_widget.tag_ranges("sel"):
+        try:
+            selected_text = text_widget.get("sel.first", "sel.last")
+            pyperclip.copy(selected_text)
+            status("Copied to Clipboard")
+            log_event("Copied selection to clipboard")
+        except tk.TclError as e:
+            status("Copy failed")
+            log_event(f"Copy failed: {e}")
+    else:
+        status("Nothing selected to copy")
+        log_event("Copy attempted with no selection.")
 
 # Labels
 title_label = tk.Label(root, text="Version: " + version_number + " | "+ " Running on: " + userOS, fg="white")
@@ -154,7 +173,7 @@ def clear_text_area():
 # Here we handle window resizing
 def resize_window():
     resize_window = tk.Toplevel()
-    resize_window.title("Resize Window |" + program_name)
+    resize_window.title("Resize Window")
     resize_window.geometry("300x250")
     width_label = tk.Label(resize_window, text="Width:")
     width_label.pack()
@@ -165,7 +184,7 @@ def resize_window():
     height_entry = tk.Entry(resize_window)
     height_entry.pack()
     apply_button = tk.Button(resize_window, text="Apply", command=lambda: apply_resize(width_entry.get(), height_entry.get()))
-    apply_button.pack()
+    apply_button.pack(padx=10, pady=5)
 
     def apply_resize(width, height):
         try:
@@ -189,22 +208,22 @@ def resize_window():
         resize_window.destroy()
 
     revert_button = tk.Button(resize_window, text="Revert to Saved Size", command=revert_resize)
-    revert_button.pack()
+    revert_button.pack(padx=10, pady=5)
     revert_factory_button = tk.Button(resize_window, text="Revert to Default Size", command=default_window_resize)
-    revert_factory_button.pack()
+    revert_factory_button.pack(padx=10, pady=5)
     close_button = tk.Button(resize_window, text="Close", command=resize_window.destroy)
-    close_button.pack()
+    close_button.pack(padx=10, pady=5)
 
 def settings_window():
-    root.title("Settings |" + program_name)
     settings_win = tk.Toplevel(root)
+    settings_win.title("Settings")
     settings_win.geometry("250x160")
     theme_button = tk.Button(settings_win, text="Toggle Theme", command=toggle_theme)
-    theme_button.pack()
+    theme_button.pack(padx=10, pady=5)
     resize_button = tk.Button(settings_win, text="Resize Window", command=resize_window)
-    resize_button.pack()
+    resize_button.pack(padx=10, pady=5)
     back_button = tk.Button(settings_win, text="Back", command=settings_win.destroy)
-    back_button.pack()
+    back_button.pack(padx=10, pady=5)
 
 
 #Declare button and called upon functions
@@ -216,15 +235,25 @@ settings_button = tk.Button(root, text="Settings", command=settings_window)
 
 
 # Sets placement of all elements
-status_label.pack(side="bottom")
-title_label.pack(side="top")
+status_label.pack(side="bottom", padx=10, pady=5)
+title_label.pack(side="top", padx=10, pady=5)
 text_widget.pack(side ="top", fill="both", expand=True) 
-print_button.pack(side="left")
-clear_text_button.pack(side="right")
-exit_button.pack(side="right")
-settings_button.pack(side="right")
-view_log_button.pack(side="left")
+print_button.pack(side="left", padx=10, pady=5)
+clear_text_button.pack(side="right", padx=10, pady=5)
+exit_button.pack(side="right", padx=10, pady=5)
+settings_button.pack(side="right", padx=10, pady=5)
+view_log_button.pack(side="left", padx=10, pady=5)
 menubar.add_cascade(label="File", menu=file_menu)
 menubar.add_cascade(label="Edit", menu=edit_menu)
+
+# Add commands to the Edit menu
+edit_menu.add_command(label="Cut", command=cut_content_to_clipboard, accelerator="Ctrl+X")
+edit_menu.add_command(label="Copy", command=copy_content_to_clipboard, accelerator="Ctrl+C")
+
+# Optional: bind keyboard shortcuts for convenience
+root.bind_all("<Control-x>", lambda event: cut_content_to_clipboard())
+root.bind_all("<Control-X>", lambda event: cut_content_to_clipboard())
+root.bind_all("<Control-c>", lambda event: copy_content_to_clipboard())
+root.bind_all("<Control-C>", lambda event: copy_content_to_clipboard())
 
 root.mainloop()

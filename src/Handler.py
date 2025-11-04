@@ -3,7 +3,7 @@ from os import system
 import sys
 import time
 import platform
- 
+
 # This file handles any console output, logging, and OS Detection for PyPad.
 
 # Version Number
