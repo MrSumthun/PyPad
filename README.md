@@ -3,7 +3,7 @@
 Lightweight plain-text editor built with Python and Tkinter. Focuses on fast read/write operations and a minimal, familiar UI.
 
 ## Status
-- Version: 0.2
+- Version: 2.0
 - Stable for basic editing and logging. Several UX and safety improvements planned.
 
 ## Features
@@ -31,9 +31,6 @@ To change defaults, edit File_Worker.py:
 - file_name — base name for the data file
 - log_file_name — base name for the log file
 
-Recommended improvements:
-- Add a settings/config file for user preferences
-- Use a file dialog for choosing save locations
 
 ## Development notes
 - Current implementation opens files at module import and keeps handles open. Prefer using context managers (with open(...)) to avoid resource leaks.
@@ -41,7 +38,6 @@ Recommended improvements:
 - Error handling is minimal; add try/except around I/O operations.
 
 ## Roadmap / TODO
-- Save As dialog and file-format selection (.txt, .md, .rtf)
 - Multiple documents / tabs
 - Undo/redo, search/replace
 - Replace module-level open() calls with per-operation opens

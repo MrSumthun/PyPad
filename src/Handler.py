@@ -1,16 +1,30 @@
+import os 
 from os import system
 import sys
 import time
 import platform
-from src.File_Worker import log_event, delete_log
 from colorama import Fore, Style
-from PyPad import on_close
  
-# This file handles any console output and OS Detection for PyPad.
-# Also handles status labels in the GUI.
+# This file handles any console output, logging, and OS Detection for PyPad.
 
 # Version Number
-version_number = "0.3.1"
+version_number = "2.0"
+
+# Set up log file path and log file object
+log_file_name = "PyPad_Log"
+log_file_path = log_file_name + ".txt"
+log_file = open(log_file_path, "a+")
+
+# Here we log events to a log file
+def log_event(x):
+    print(x)
+    log_file.seek(0, os.SEEK_END)
+    log_file.write(time.ctime() + " - " + x + "\n")
+    log_file.flush()
+
+# Here we delete the log file contents
+def delete_log():
+    log_file.truncate(0)
 
 # Where are we?
 def detect_os():
@@ -29,7 +43,7 @@ def clear_screen():
         system("clear")
 
 # Initializes console on program start.
-def init():
+def init_console():
     delete_log()
     clear_screen()
 
@@ -40,7 +54,6 @@ def init():
     log_event("Detected OS: " + detect_os())
 
 def exit_program_gracefully():
-    on_close()
     log_event("Program Exited by User at: " + time.ctime())
     print(Fore.RED + " *** Exiting PyPad... ***")
     sys.exit(0)

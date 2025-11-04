@@ -2,7 +2,8 @@ import json
 import os
 import platform
 from pathlib import Path
-from src.Console_Handler import log_event
+from src.Handler import log_event
+
 DEFAULTS = {
     "geometry": "780x434",
     "theme": "auto",   # "auto", "light", "dark"
