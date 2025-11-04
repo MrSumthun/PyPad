@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import os
+from PIL import Image, ImageTk
 from src.Handler import init_console, log_event, exit_program_gracefully, detect_os, version_number
 import src.Settings as settings
 import pyperclip
@@ -16,6 +17,11 @@ cfg = settings.load_settings()
 root.geometry(cfg.get("geometry", default_window_size))
 bg_color = cfg.get("theme", "white" if detect_os() == "Windows" else "black")
 userOS = detect_os()
+try:
+    render = ImageTk.PhotoImage(Image.open("src/assets/pypad_icon.png"))
+    root.iconphoto(False, render)
+except Exception as e:
+    log_event(f"Error loading icon: {e}")
 
 # Initializing our commonly used variables
 program_name = "PyPad 2.0 - A Lightweight Text Editor | "
@@ -249,11 +255,5 @@ menubar.add_cascade(label="Edit", menu=edit_menu)
 # Add commands to the Edit menu
 edit_menu.add_command(label="Cut", command=cut_content_to_clipboard, accelerator="Ctrl+X")
 edit_menu.add_command(label="Copy", command=copy_content_to_clipboard, accelerator="Ctrl+C")
-
-# Optional: bind keyboard shortcuts for convenience
-root.bind_all("<Control-x>", lambda event: cut_content_to_clipboard())
-root.bind_all("<Control-X>", lambda event: cut_content_to_clipboard())
-root.bind_all("<Control-c>", lambda event: copy_content_to_clipboard())
-root.bind_all("<Control-C>", lambda event: copy_content_to_clipboard())
 
 root.mainloop()
