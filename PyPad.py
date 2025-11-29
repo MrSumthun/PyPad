@@ -8,8 +8,8 @@ import pyperclip
 
 root = tk.Tk()
 init_console()
-
-global bg_color
+logo_path = "src/assets/pypad_icon.ico"
+#global bg_color
 
 default_window_size = "1200x800"
 cfg = settings.load_settings() # Load settings at startup
@@ -25,7 +25,7 @@ else:
 # Detect OS for display
 userOS = detect_os()
 try:
-    render = ImageTk.PhotoImage(Image.open("src/assets/pypad_icon.ico"))
+    render = ImageTk.PhotoImage(Image.open(logo_path))
     root.iconphoto(False, render)
 except Exception as e:
     log_event(f"Error loading icon: {e}")
@@ -132,7 +132,6 @@ def copy_content_to_clipboard():
         log_event("Copy attempted with no selection.")
 
 # Labels
-title_label = tk.Label(root, text="Version: " + version_number + " | "+ " Running on: " + userOS, fg="white")
 status_label = tk.Label(root, width=20, height=5)
 
 # Save settings on close
@@ -147,7 +146,7 @@ root.protocol("WM_DELETE_WINDOW", on_close)
 
 # Toggles theme between light and dark modes
 def toggle_theme():
-    global bg_color  # Add global declaration
+    global bg_color
     new_bg = "white" if text_widget.cget("bg") == "black" else "black"
     text_widget.config(bg=new_bg)
     bg_color = new_bg  # Update the global bg_color
@@ -184,7 +183,10 @@ def clear_text_area():
 def resize_window():
     resize_window = tk.Toplevel()
     resize_window.title("Resize Window")
-    resize_window.geometry("300x250")
+    resize_window.geometry("300x300")
+    current_size = root.winfo_geometry().split("+")[0]
+    size_label = tk.Label(resize_window, text=f"Current Size: {current_size}")
+    size_label.pack(padx=10, pady=5)
     width_label = tk.Label(resize_window, text="Width:")
     width_label.pack()
     width_entry = tk.Entry(resize_window)
@@ -202,10 +204,11 @@ def resize_window():
             height_int = int(height)
             root.geometry(f"{width_int}x{height_int}")
             status("Window Resized")
+            log_event(f"Window resized to {width_int}x{height_int}")
             resize_window.destroy()
         except ValueError:
             log_event("Invalid dimensions entered for resize.")
-            status("Invalid dimensions")
+            status("Invalid Dimensions")
     # Reverts to saved size from settings
     def revert_resize():
         root.geometry(cfg.get("geometry", "780x434"))
@@ -236,26 +239,40 @@ def settings_window():
     back_button.pack(padx=10, pady=5)
 
 
-#Declare button and called upon functions
+#Declare buttons and functions
 view_log_button = tk.Button(root, text="View Log", command=lambda: os.startfile("PyPad_Log.txt") if userOS == "Windows" else os.system("open PyPad_Log.txt") if userOS == "MacOS" else os.system("xdg-open PyPad_Log.txt"))
 exit_button = tk.Button(root, text="Exit", command=exit_program)    
 clear_text_button = tk.Button(root, text="Clear", command=clear_text_area)
 settings_button = tk.Button(root, text="Settings", command=settings_window)
 
+# Load and display logo and title in a header frame (image left of title)
+header_frame = tk.Frame(root, bg=root.cget("bg"))
+header_frame.pack(side="top", fill="x", padx=10, pady=5)
+
+# keep a single PhotoImage reference to avoid GC
+render = ImageTk.PhotoImage(Image.open(logo_path))
+image_label = tk.Label(header_frame, image=render, bg=header_frame.cget("bg"))
+image_label.image = render  # preserve reference
+
+# Use fg_color determined earlier for good contrast
+title_label = tk.Label(header_frame, text="Version: " + str(version_number) + " | Running on: " + userOS, fg=fg_color, bg=header_frame.cget("bg"))
+
+image_label.pack(side="left")
+title_label.pack(side="left", padx=(8,0))
 
 # Sets placement of all elements
 status_label.pack(side="bottom", padx=10, pady=5)
-title_label.pack(side="top", padx=10, pady=5)
 text_widget.pack(side ="top", fill="both", expand=True) 
-clear_text_button.pack(side="right", padx=10, pady=5)
-exit_button.pack(side="right", padx=10, pady=5)
-settings_button.pack(side="right", padx=10, pady=5)
-view_log_button.pack(side="left", padx=10, pady=5)
+clear_text_button.pack(side="right")
+exit_button.pack(side="right")
+settings_button.pack(side="left")
+view_log_button.pack(side="left")
 menubar.add_cascade(label="File", menu=file_menu)
 menubar.add_cascade(label="Edit", menu=edit_menu)
 
 # Add commands to the Edit menu
 edit_menu.add_command(label="Cut", command=cut_content_to_clipboard, accelerator="Ctrl+X")
 edit_menu.add_command(label="Copy", command=copy_content_to_clipboard, accelerator="Ctrl+C")
+edit_menu.add_command(label="Paste", command=lambda: text_widget.insert(tk.INSERT, pyperclip.paste()), accelerator="Ctrl+V")
 
 root.mainloop()
