@@ -27,21 +27,17 @@ Lightweight plain-text editor built with Python and Tkinter. Focuses on fast rea
 These files are created or updated in the current working directory by default.
 
 ## Configuration
-To change defaults, edit File_Worker.py:
-- file_name — base name for the data file
-- log_file_name — base name for the log file
+Utilize the In-Application settings menu to configure.
+Settings are saved in between user sessions
 
 
 ## Development notes
 - Current implementation opens files at module import and keeps handles open. Prefer using context managers (with open(...)) to avoid resource leaks.
 - Logging writes appended timestamped messages. Use seek/end or open with "a" for reliable appends.
-- Error handling is minimal; add try/except around I/O operations.
 
 ## Roadmap / TODO
 - Multiple documents / tabs
-- Undo/redo, search/replace
-- Replace module-level open() calls with per-operation opens
-- Unit tests and CI
+- More robust UI
 
 ## Contributing
 1. Fork and create a feature branch.
