@@ -4,6 +4,8 @@ import platform
 from pathlib import Path
 from src.Handler import log_event
 
+
+# I was in a state writing this that few may understand. God help those who read this
 DEFAULTS = {
     "geometry": "780x434",
     "theme": "black",   # "auto", "white", "black"

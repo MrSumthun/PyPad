@@ -11,18 +11,18 @@ init_console()
 
 global bg_color
 
-# Load settings
-
 default_window_size = "1200x800"
-cfg = settings.load_settings()
+cfg = settings.load_settings() # Load settings at startup
 root.geometry(cfg.get("geometry", default_window_size))
 bg_color = cfg.get("theme")
 
+# Set foreground color based on background for visibility
 if bg_color == "black":
     fg_color = "white"
 else:
     fg_color = "black"  
 
+# Detect OS for display
 userOS = detect_os()
 try:
     render = ImageTk.PhotoImage(Image.open("src/assets/pypad_icon.ico"))
@@ -53,7 +53,6 @@ def open_file():
     )
 
     if file_path:
-        #DEBUG: print(f"Selected file: {file_path}")
         try:
             with open(file_path, 'r') as file:
                 content = file.read()
@@ -141,7 +140,6 @@ def on_close():
     # Gather minimal state to persist
     cfg["geometry"] = root.winfo_geometry()
     cfg["theme"] = bg_color 
-    #print(cfg)
     settings.save_settings(cfg)
     root.destroy()
 
@@ -176,12 +174,6 @@ def status(x):
 def get_text():
     text = text_widget.get("1.0", "end-1c")
     return text
-
-## DEPRECATED: Prints textarea to console
-#def console_print():
-#    print(str(get_text()))    
-#    text_widget.delete("1.0", tk.END)
-#    status("Printed to Console")
 
 # Nulls out the text area     
 def clear_text_area():
@@ -247,7 +239,6 @@ def settings_window():
 #Declare button and called upon functions
 view_log_button = tk.Button(root, text="View Log", command=lambda: os.startfile("PyPad_Log.txt") if userOS == "Windows" else os.system("open PyPad_Log.txt") if userOS == "MacOS" else os.system("xdg-open PyPad_Log.txt"))
 exit_button = tk.Button(root, text="Exit", command=exit_program)    
-#print_button = tk.Button(root, text="Print to Console", command=console_print)
 clear_text_button = tk.Button(root, text="Clear", command=clear_text_area)
 settings_button = tk.Button(root, text="Settings", command=settings_window)
 
@@ -256,7 +247,6 @@ settings_button = tk.Button(root, text="Settings", command=settings_window)
 status_label.pack(side="bottom", padx=10, pady=5)
 title_label.pack(side="top", padx=10, pady=5)
 text_widget.pack(side ="top", fill="both", expand=True) 
-#print_button.pack(side="left", padx=10, pady=5)
 clear_text_button.pack(side="right", padx=10, pady=5)
 exit_button.pack(side="right", padx=10, pady=5)
 settings_button.pack(side="right", padx=10, pady=5)
